@@ -3,6 +3,119 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="cn.jboa.dao.ClaimVoucherMapper">
-  
+
+    <resultMap id="claimMap" type="ClaimVoucher">
+      <id property="id" column="id" />
+      <result property="createTime" column="create_time"/>
+      <result property="event" column="event"/>
+      <result property="totalAccount" column="total_account"/>
+      <result property="status" column="status"/>
+      <result property="modifyTime" column="modify_time"/>
+      <association property="nextDeal" column="next_deal_sn" select="cn.jboa.dao.EmployeeMapper.findEmployeeBySn"/>
+      <association property="creator" column="create_sn" select="cn.jboa.dao.EmployeeMapper.findEmployeeBySn"/>
+      <collection property="detailList" column="id" javaType="ArrayList" ofType="ClaimVoucherDetail" select="cn.jboa.dao.ClaimVoucherDetailMapper.getDetailListByClaimId"/>
+      <collection property="checkResultList" column="id" select="cn.jboa.dao.CheckResultMapper.getCheckResultByClaimId"/>
+    </resultMap>
+
+    <select id="getClaimVoucherCount" resultType="int" >
+        SELECT COUNT(1) FROM biz_claim_voucher v
+        INNER JOIN sys_employee e ON e.`SN`=v.`CREATE_SN`
+        <where>
+          <if test="createSn!=''">
+            and v.`CREATE_SN`=#{createSn}
+          </if>
+          <if test="dealSn!=''">
+            and v.`NEXT_DEAL_SN`=#{dealSn}
+          </if>
+          <if test="status!='' and status!=null">
+            and v.STATUS=#{status}
+          </if>
+          <if test="startDate!='' and startDate!=null">
+            and v.CREATE_TIME > #{startDate}
+          </if>
+          <if test="endDate!='' and endDate!=null">
+            and v.CREATE_TIME &lt; #{startDate}
+          </if>
+        </where>
+    </select>
+
+    <select id="getClaimVoucherPage" resultMap="claimMap">
+      SELECT v.*,v.ID as v_id FROM biz_claim_voucher v
+      INNER JOIN sys_employee e ON e.`SN`=v.`CREATE_SN`
+      <where>
+        <if test="createSn!=''">
+          and v.`CREATE_SN`=#{createSn}
+        </if>
+        <if test="dealSn!=''">
+          and v.`NEXT_DEAL_SN`=#{dealSn}
+        </if>
+        <if test="status!='' and status!=null">
+          and v.STATUS=#{status}
+        </if>
+        <if test="startDate!='' and startDate!=null">
+          and v.CREATE_TIME > #{startDate}
+        </if>
+        <if test="endDate!='' and endDate!=null">
+          and v.CREATE_TIME &lt; #{startDate}
+        </if>
+      </where>
+      limit #{pageNo},#{pageSize}
+    </select>
+
+    <insert id="save" parameterType="ClaimVoucher">
+      <selectKey resultType="int" order="AFTER" keyProperty="id">select LAST_INSERT_ID()</selectKey>
+      INSERT INTO biz_claim_voucher(NEXT_DEAL_SN,CREATE_SN,CREATE_TIME,EVENT,TOTAL_ACCOUNT,STATUS)
+      VALUES(#{nextDeal.sn},#{creator.sn},#{createTime},#{event},#{totalAccount},#{status})
+    </insert>
+
+    <select id="get" resultMap="claimMap" parameterType="int">
+      SELECT v.* FROM biz_claim_voucher v
+      INNER JOIN sys_employee e ON e.`SN`=v.`CREATE_SN`
+      WHERE v.ID=#{id}
+    </select>
+
+    <delete id="deleteClaimVoucherById" parameterType="int">
+      DELETE FROM biz_claim_voucher WHERE ID=#{id}
+    </delete>
+
+    <update id="updateClaimVoucher" parameterType="ClaimVoucher">
+      update biz_claim_voucher
+      <set>
+        <if test="event!=null and event!=''">
+          EVENT=#{event},
+        </if>
+        <if test="totalAccount!=null and totalAccount!=''">
+          TOTAL_ACCOUNT=#{totalAccount},
+        </if>
+        <if test="status!=null and status!=''">
+          STATUS=#{status},
+        </if>
+        <if test="modifyTime!=null">
+          MODIFY_TIME=#{modifyTime},
+        </if>
+        <if test="nextDeal!=null">
+          NEXT_DEAL_SN=#{nextDeal.sn},
+        </if>
+      </set>
+      where ID=#{id}
+    </update>
+
+    <select id="getClaimVoucherByModifyDate" resultMap="claimMap">
+      select * from biz_claim_voucher bcv
+      inner join sys_employee se on bcv.CREATE_SN = se.SN
+      inner join sys_department department on se.DEPARTMENT_ID = department.ID
+      <where>
+        <if test="startDate!=null">
+          and bcv.CREATE_TIME > #{startDate}
+        </if>
+        <if test="endDate!=null">
+          and bcv.CREATE_TIME &lt; #{endDate}
+        </if>
+        <if test="departmentId!=0">
+          and department.ID=#{departmentId}
+        </if>
+      </where>
+      and bcv.status = '已付款'
+    </select>
 
   </mapper>

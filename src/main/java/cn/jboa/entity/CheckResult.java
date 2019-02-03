@@ -1,14 +1,15 @@
 package cn.jboa.entity;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
 public class CheckResult {
     private int id;
-    private Timestamp checkTime;
+    private Date checkTime;
     private String result;
     private String comment;
     private ClaimVoucher claimVoucher;
+    private Employee checkEmployee;
 
     public int getId() {
         return id;
@@ -18,11 +19,11 @@ public class CheckResult {
         this.id = id;
     }
 
-    public Timestamp getCheckTime() {
+    public Date getCheckTime() {
         return checkTime;
     }
 
-    public void setCheckTime(Timestamp checkTime) {
+    public void setCheckTime(Date checkTime) {
         this.checkTime = checkTime;
     }
 
@@ -40,6 +41,14 @@ public class CheckResult {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Employee getCheckEmployee() {
+        return checkEmployee;
+    }
+
+    public void setCheckEmployee(Employee checkEmployee) {
+        this.checkEmployee = checkEmployee;
     }
 
     @Override

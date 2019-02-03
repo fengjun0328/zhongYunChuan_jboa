@@ -94,19 +94,19 @@
 	}
 </script>
 </head>
-<body onload="check()">
+<body <%--onload="check()"--%>>
 	<input type="hidden" value="${path}"/>
 	<div class="login-top"></div>
 	<div class="login-area">
-		<form action="login.action" method="post">
+		<form action="/emp/login" method="post">
 			<label>
 				工&nbsp;&nbsp;号：
 			</label>
-			<input type="text" name="employee.sn" />
+			<input type="text" name="sn" />
 			<label>
 				密&nbsp;&nbsp;码：
 			</label>
-			<input type="password" name="employee.password" />
+			<input type="password" name="password" />
 			<label>
 				验证码：
 			</label>

@@ -3,6 +3,91 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="cn.jboa.dao.ClaimVoucherStatisticsMapper">
-  
+
+  <resultMap id="statisticsMap" type="ClaimVoucherStatistics">
+    <id property="id" column="s_id"/>
+    <result property="totalCount" column="TOTAL_COUNT"/>
+    <result property="year" column="YEAR"/>
+    <result property="month" column="MONTH"/>
+    <result property="modifyTime" column="MODIFY_TIME"/>
+    <association property="department" javaType="Department">
+      <id property="id" column="d_id"/>
+      <result property="name" column="d_name"/>
+    </association>
+  </resultMap>
+
+  <select id="getDeptClaimVoucherStatisticsCount" resultType="int">
+    select count(1)  from biz_claim_voucher_statistics s
+    <where>
+      <if test="year!=0">
+        and s.year=#{year}
+      </if>
+      <if test="startMonth!=0">
+        and s.month >= #{startMonth}
+      </if>
+      <if test="endMonth!=0">
+        and s.month &lt;= #{endMonth}
+      </if>
+      <if test="deptId!=0">
+       and s.DEPARTMENT_ID = #{deptId}
+      </if>
+    </where>
+  </select>
+
+
+  <select id="getDeptClaimVoucherStatisticsByPage" resultMap="statisticsMap">
+    select s.*,s.ID s_id ,d.ID d_id,d.NAME d_name from biz_claim_voucher_statistics s
+    inner join sys_department d on s.DEPARTMENT_ID = d.ID
+    <where>
+      <if test="year!=0">
+        and s.YEAR=#{year}
+      </if>
+      <if test="startMonth!=0">
+        and s.MONTH >= #{startMonth}
+      </if>
+      <if test="endMonth!=0">
+        and s.MONTH &lt;= #{endMonth}
+      </if>
+      <if test="deptId!=0">
+        and d.ID = #{deptId}
+      </if>
+    </where>
+    limit #{from},#{pageSize};
+  </select>
+
+
+  <resultMap id="statisticsMapTwo" type="ClaimVoucherStatistics">
+    <id property="id" column="s_id"/>
+    <result property="totalCount" column="totalAccount"/>
+    <result property="year" column="YEAR"/>
+    <result property="month" column="MONTH"/>
+    <result property="modifyTime" column="MODIFY_TIME"/>
+  </resultMap>
+  <select id="getClaimVoucherStatistics" resultMap="statisticsMapTwo">
+    select s.*,sum(s.TOTAL_COUNT) totalAccount from biz_claim_voucher_statistics s
+    <where>
+      <if test="year!=0">
+        and s.YEAR=#{year}
+      </if>
+      <if test="startMonth!=0">
+        and s.MONTH >= #{startMonth}
+      </if>
+      <if test="endMonth!=0">
+        and s.MONTH &lt;= #{endMonth}
+      </if>
+    </where>
+    group by s.YEAR,s.MONTH
+  </select>
+
+  <update id="update" parameterType="ClaimVoucherStatistics">
+    update biz_claim_voucher_statistics
+    set TOTAL_COUNT=TOTAL_COUNT+#{totalCount},MODIFY_TIME=#{modifyTime}
+    where DEPARTMENT_ID=#{department.id} and year=#{year} and month=#{month}
+  </update>
+
+  <insert id="save" parameterType="ClaimVoucherStatistics">
+    INSERT INTO BIZ_CLAIM_VOUCHER_STATISTICS (TOTAL_COUNT, YEAR, MONTH, DEPARTMENT_ID, MODIFY_TIME)
+    VALUES (#{totalCount}, #{year}, #{month}, #{department.id},#{modifyTime});
+  </insert>
 
   </mapper>

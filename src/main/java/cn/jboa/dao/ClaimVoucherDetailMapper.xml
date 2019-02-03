@@ -3,6 +3,32 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="cn.jboa.dao.ClaimVoucherDetailMapper">
-  
+
+    <resultMap id="detailMap" type="ClaimVoucherDetail">
+      <id property="id" column="id"/>
+      <result property="item" column="item"/>
+      <result property="account" column="account"/>
+      <result property="desc" column="des"/>
+      <association property="claimVoucher" column="main_id" select="cn.jboa.dao.ClaimVoucherMapper.get"/>
+    </resultMap>
+
+
+    <insert id="save" parameterType="ClaimVoucherDetail">
+      <selectKey resultType="int" order="AFTER" keyProperty="id">select LAST_INSERT_ID()</selectKey>
+      INSERT INTO biz_claim_voucher_detail(MAIN_ID,ITEM,ACCOUNT,DES)
+      VALUES(#{claimVoucher.id},#{item},#{account},#{desc})
+    </insert>
+
+    <delete id="deleteClaimVoucherDetailByMainId" parameterType="int">
+      DELETE FROM biz_claim_voucher_detail WHERE MAIN_ID=#{mainId}
+    </delete>
+
+    <delete id="deleteClaimVoucherDetailById" parameterType="int">
+      DELETE FROM biz_claim_voucher_detail WHERE ID=#{Id}
+    </delete>
+
+    <select id="getDetailListByClaimId" resultMap="detailMap">
+      select * from biz_claim_voucher_detail where MAIN_ID=#{claimId}
+    </select>
 
   </mapper>

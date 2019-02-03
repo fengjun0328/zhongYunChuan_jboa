@@ -1,20 +1,24 @@
 package cn.jboa.entity;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Objects;
 
 public class ClaimVoucher {
     private int id;
-    private Timestamp createTime;
+    private Date createTime;
     private String event;
     private double totalAccount;
     private String status;
-    private Timestamp modifyTime;
-    private Collection<CheckResult> checkResultList;
+    private Date modifyTime;
+
     private Employee nextDeal;
     private Employee creator;
-    private Collection<ClaimVoucherDetail> detailList;
+
+    private Collection<ClaimVoucherDetail> detailList = new ArrayList<ClaimVoucherDetail>();
+    private Collection<CheckResult> checkResultList;
 
     public int getId() {
         return id;
@@ -24,11 +28,11 @@ public class ClaimVoucher {
         this.id = id;
     }
 
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
@@ -56,11 +60,11 @@ public class ClaimVoucher {
         this.status = status;
     }
 
-    public Timestamp getModifyTime() {
+    public Date getModifyTime() {
         return modifyTime;
     }
 
-    public void setModifyTime(Timestamp modifyTime) {
+    public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
     }
 

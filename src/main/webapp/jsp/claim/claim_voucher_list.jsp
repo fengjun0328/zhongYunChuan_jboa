@@ -1,9 +1,9 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ include file="../common/taglib.jsp"%>
-<link href="<%=request.getContextPath() %>/css/style.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/common.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.0.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/My97DatePicker/WdatePicker.js"></script>
+<link href="<%=request.getContextPath() %>/statics/css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="${pageContext.request.contextPath}/statics/js/common.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/statics/js/jquery-1.8.0.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/statics/js/My97DatePicker/WdatePicker.js"></script>
 <script>
 	$(function(){
 			 //日期选择控件
@@ -17,7 +17,7 @@
    	function delVoucher(id){
    		if(!confirm('确定删除报单吗')) return;
    		
-   		document.claimVoucherForm.action = "claimVoucher_deleteClaimVoucherById.action?claimVoucher.id="+id;
+   		document.claimVoucherForm.action = "/claimVoucher/deleteClaimVoucherById/"+id;
    		document.claimVoucherForm.submit();
    		
    	}
@@ -27,21 +27,25 @@
 	<div class="t">报销单列表</div>
 	<div class="pages">
 		<div class="forms">
-			 <s:form action="claimVoucher_searchClaimVoucher.action" name="queryForm">
+			 <form action="/claimVoucher/searchClaimVoucher" name="queryForm">
 	       		<label>报销单状态</label>
-	  			<s:select name="claimVoucher.status" list="statusMap" 
-	  			listKey="key" listValue="value" headerKey="" headerValue="全部" theme="simple"></s:select>
+                 <select name="status">
+                     <option value="">全部</option>
+                     <c:forEach items="${statusMap}" var="item">
+                         <option value="${item.key}"  <c:if test="${status == item.key}">selected="selected"</c:if> >${item.value}</option>
+                     </c:forEach>
+                 </select>
 		       <label for="time">开始时间</label>
-		       <s:textfield name="startDate" id="startDate" cssClass="nwinput"></s:textfield>
+		       <input type="text" name="startDate" id="startDate" class="nwinput" value="${startDate}"/>
 		       <label for="end-time">结束时间</label>
-		       <s:textfield name="endDate" id="endDate" cssClass="nwinput"></s:textfield>
+               <input type="text"  name="endDate" id="endDate" class="nwinput" value="${endDate}"/>
 		       <input type="hidden" name="pageNo" value="1"/>
 		 	   <input type="hidden" name="pageSize" value="5"/>
-		       <s:submit cssClass="submit_01" value="查询"/>
-	       </s:form>
+               <input type="submit" value="查询" class="submit_01"/>
+	       </form>
 	     </div>
 	<!--增加报销单 区域 开始-->
-	<s:form action="claimVoucher_searchClaimVoucher.action" name="claimVoucherForm">
+	<form action="/claimVoucher/searchClaimVoucher" name="claimVoucherForm">
 		<table width="90%" border="0" cellspacing="0" cellpadding="0" class="list items">
 	      <tr class="even">
 	        <td>编号</td>
@@ -52,37 +56,36 @@
 	        <td>待处理人</td>
 	        <td>操作</td>
 	      </tr>
-	      <s:iterator value="pageSupport.items" id="claimVoucher" begin="0" status="s">
-	      <tr>
-	        <td><a href="claimVoucher_getClaimVoucherById.action?claimVoucher.id=<s:property value="#claimVoucher.id"/>"><s:property value="#claimVoucher.id"/></a></td>
-	        <td><s:date name="#claimVoucher.createTime"/></td>
-	        <td><s:property value="#claimVoucher.creator.name"/></td>
-	        <td><s:property value="#claimVoucher.totalAccount"/></td>
-	        <td><s:property value="#claimVoucher.status"/></td>
-	        <td><s:property value="#claimVoucher.nextDeal.name"/></td>
-	        <td>
-	        	<s:if test="#claimVoucher.status == '新创建' || #claimVoucher.status == '已打回'">
-	        		<a href="claimVoucher_toUpdate.action?claimVoucher.id=<s:property value="#claimVoucher.id"/>">
-			        	<img src="${images}/edit.gif" width="16" height="16" /> 
-			        </a>
-			        <a onClick="delVoucher(<s:property value="#claimVoucher.id"/>)" href="#">
-			        	<img src="${images}/delete.gif" width="16" height="16" />
-			        </a>
-		        </s:if>
-		        <img src="${images}/save.gif" width="16" height="16" /> 
-		        <a href="claimVoucher_getClaimVoucherById.action?claimVoucher.id=<s:property value="#claimVoucher.id"/>">
-		        	<img src="${images}/search.gif" width="16" height="15" />
-		        </a>
-		        <s:if test="#claimVoucher.nextDeal.name == #session.employee.name">
-		        	<s:if test="#claimVoucher.status == '已提交' || #claimVoucher.status == '侍审批' || #claimVoucher.status == '已审批'">
-				        <a href="claimVoucher_toCheck.action?claimVoucher.id=<s:property value="#claimVoucher.id"/>">
-				         <img src="${images}/sub.gif" width="16" height="16" />
-				        </a>
-			        </s:if>
-		        </s:if>
-	        </td>
-	      </tr>
-	      </s:iterator>
+          <c:forEach items="${pageSupport.items}" var="claimVoucher">
+              <td><a href="/claimVoucher/getClaimVoucherById/${claimVoucher.id}">${claimVoucher.id}</a></td>
+              <td><fmt:formatDate value="${claimVoucher.createTime}" pattern="yyyy-MM-dd hh:mm:ss"/> </td>
+              <td>${claimVoucher.creator.name}</td>
+              <td>${claimVoucher.totalAccount}</td>
+              <td>${claimVoucher.status}</td>
+              <td>${claimVoucher.nextDeal.name}</td>
+              <td>
+                  <c:if test="${claimVoucher.status == '新创建' || claimVoucher.status == '已打回'}">
+                      <a href="/claimVoucher/toUpdate/${claimVoucher.id}">
+                          <img src="${images}/edit.gif" width="16" height="16" />
+                      </a>
+                      <a onClick="delVoucher(${claimVoucher.id})" href="#">
+                          <img src="${images}/delete.gif" width="16" height="16" />
+                      </a>
+                  </c:if>
+                  <img src="${images}/save.gif" width="16" height="16" />
+                  <a href="/claimVoucher/getClaimVoucherById/${claimVoucher.id}">
+                      <img src="${images}/search.gif" width="16" height="15" />
+                  </a>
+                  <c:if test="${claimVoucher.nextDeal.name == sessionScope.employee.name}">
+                      <c:if test="${claimVoucher.status == '已提交' || claimVoucher.status == '侍审批' || claimVoucher.status == '已审批'}">
+                          <a href="/claimVoucher/toCheck/${claimVoucher.id}">
+                              <img src="${images}/sub.gif" width="16" height="16" />
+                          </a>
+                      </c:if>
+                  </c:if>
+              </td>
+              </tr>
+          </c:forEach>
 	      <tr>
 	        <td colspan="6" align="center">
 		      	<c:import url="rollPage.jsp" charEncoding="UTF-8">
@@ -94,7 +97,7 @@
   		  	</td>
   		  </tr>
 	    </table>      
-	   </s:form>  
+	   </form>
 	          <!--增加报销单 区域 结束-->
        </div>
       </div>

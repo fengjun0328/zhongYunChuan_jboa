@@ -226,6 +226,28 @@
       <version>2.1.2.RELEASE</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/jexcelapi/jxl -->
+    <!--excel支持-->
+    <dependency>
+      <groupId>jexcelapi</groupId>
+      <artifactId>jxl</artifactId>
+      <version>2.4.2</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/freemarker/freemarker -->
+    <dependency>
+      <groupId>freemarker</groupId>
+      <artifactId>freemarker</artifactId>
+      <version>2.3.8</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.jfree/jfreechart -->
+    <dependency>
+      <groupId>org.jfree</groupId>
+      <artifactId>jfreechart</artifactId>
+      <version>1.0.19</version>
+    </dependency>
+
+
     <!--热部署支持-->
 
   </dependencies>

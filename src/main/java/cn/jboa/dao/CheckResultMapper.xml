@@ -3,6 +3,27 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="cn.jboa.dao.CheckResultMapper">
-  
+
+    <resultMap id="resultMap" type="CheckResult">
+      <id property="id" column="id"/>
+      <result property="checkTime" column="CHECK_TIME"/>
+      <result property="result" column="result"/>
+      <result property="comment" column="comm"/>
+      <association property="claimVoucher" column="CLAIM_ID" select="cn.jboa.dao.ClaimVoucherMapper.get"/>
+      <association property="checkEmployee" column="CHECKER_SN" select="cn.jboa.dao.EmployeeMapper.findEmployeeBySn"/>
+    </resultMap>
+
+    <delete id="deleteCheckResultById" parameterType="int">
+        DELETE FROM biz_check_result WHERE CLAIM_ID=#{claimId}
+    </delete>
+
+    <select id="getCheckResultByClaimId" resultMap="resultMap">
+      select * from biz_check_result where CLAIM_ID=#{claimId}
+    </select>
+
+    <insert id="save" parameterType="CheckResult">
+      insert  into biz_check_result(CLAIM_ID,CHECK_TIME,CHECKER_SN,RESULT,COMM)
+      values (#{claimVoucher.id},#{checkTime},#{checkEmployee.sn},#{result},#{comment})
+    </insert>
 
   </mapper>

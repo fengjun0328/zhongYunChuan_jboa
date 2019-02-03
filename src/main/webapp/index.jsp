@@ -1,4 +1,4 @@
-  <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+  <%@ page language="java" import="java.util.*" pageEncoding="UTF-8" isELIgnored="false" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -15,10 +15,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-	<link href="css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/statics/css/style.css" rel="stylesheet" type="text/css" />
   </head>
   <%
-  	String images=request.getContextPath()+"/images";
+  	String images=request.getContextPath()+"/statics/images";
   	session.setAttribute("images",images);
   %>
   <body>

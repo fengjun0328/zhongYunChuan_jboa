@@ -50,8 +50,8 @@
 		<property name="viewResolvers">
 			<list>
 				<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-					<property name="suffix" value="/jsp/"/>
-					<property name="prefix" value=".jsp"/>
+					<property name="prefix" value="/"/>
+					<property name="suffix" value=".jsp"/>
 				</bean>
 			</list>
 		</property>

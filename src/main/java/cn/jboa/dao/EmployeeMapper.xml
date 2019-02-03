@@ -3,6 +3,49 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="cn.jboa.dao.EmployeeMapper">
-  
+
+    <resultMap id="empMap" type="Employee">
+      <id property="sn" column="sn"/>
+      <result property="name" column="name"/>
+      <result property="password" column="password"/>
+      <result property="status" column="status"/>
+      <association property="department" javaType="Department">
+        <id property="id" column="d_id"/>
+        <result property="name" column="d_name"/>
+      </association>
+      <association property="position" javaType="Position">
+        <id property="id" column="p_id"/>
+        <result property="nameCn" column="name_cn"/>
+        <result property="nameEn" column="name_en"/>
+      </association>
+    </resultMap>
+
+    <select id="findEmployeeBySn" resultMap="empMap" parameterType="string">
+      SELECT e.*,d.id AS d_id,d.`NAME` AS d_name,p.`ID` AS p_id,p.`NAME_CN`,p.`NAME_EN` FROM sys_employee e
+      INNER JOIN sys_department d ON d.`ID`=e.`DEPARTMENT_ID`
+      INNER JOIN sys_position p ON p.`ID`=e.`POSITION_ID`
+      WHERE e.SN=#{sn}
+    </select>
+
+  <select id="getManager" resultMap="empMap" parameterType="Employee">
+      SELECT e.*,d.id AS d_id,d.`NAME` AS d_name,p.`ID` AS p_id,p.`NAME_CN`,p.`NAME_EN` FROM sys_employee e
+      INNER JOIN sys_department d ON d.`ID`=e.`DEPARTMENT_ID`
+      INNER JOIN sys_position p ON p.`ID`=e.`POSITION_ID`
+      WHERE e.DEPARTMENT_ID=#{department.id} AND  p.NAME_CN='部门经理'
+  </select>
+
+  <select id="getGeneralManager" resultMap="empMap">
+    SELECT e.*,d.id AS d_id,d.`NAME` AS d_name,p.`ID` AS p_id,p.`NAME_CN`,p.`NAME_EN` FROM sys_employee e
+    INNER JOIN sys_department d ON d.`ID`=e.`DEPARTMENT_ID`
+      INNER JOIN sys_position p ON p.`ID`=e.`POSITION_ID`
+      WHERE p.NAME_CN='总经理' and e.STATUS='在职'
+  </select>
+
+  <select id="getCashier" resultMap="empMap">
+    SELECT e.*,d.id AS d_id,d.`NAME` AS d_name,p.`ID` AS p_id,p.`NAME_CN`,p.`NAME_EN` FROM sys_employee e
+    INNER JOIN sys_department d ON d.`ID`=e.`DEPARTMENT_ID`
+      INNER JOIN sys_position p ON p.`ID`=e.`POSITION_ID`
+      WHERE p.NAME_CN='财务' and e.STATUS='在职'
+  </select>
 
   </mapper>

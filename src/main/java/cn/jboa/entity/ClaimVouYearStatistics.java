@@ -1,14 +1,22 @@
 package cn.jboa.entity;
 
-import java.sql.Timestamp;
+import java.util.Date;
+import java.util.Date;
 import java.util.Objects;
 
 public class ClaimVouYearStatistics {
     private int id;
     private double totalCount;
     private int year;
-    private Timestamp modifyTime;
-    private Department dept;
+    private Date modifyTime;
+    private Department department;
+
+    public ClaimVouYearStatistics(Double totalCount, int year, Date modifyTime, Department dept) {
+        this.totalCount = totalCount;
+        this.year = year;
+        this.modifyTime = modifyTime;
+        this.department = dept;
+    }
 
     public int getId() {
         return id;
@@ -34,11 +42,11 @@ public class ClaimVouYearStatistics {
         this.year = year;
     }
 
-    public Timestamp getModifyTime() {
+    public Date getModifyTime() {
         return modifyTime;
     }
 
-    public void setModifyTime(Timestamp modifyTime) {
+    public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
     }
 
@@ -58,11 +66,11 @@ public class ClaimVouYearStatistics {
         return Objects.hash(id, totalCount, year, modifyTime);
     }
 
-    public Department getDept() {
-        return dept;
+    public Department getDepartment() {
+        return department;
     }
 
-    public void setDept(Department dept) {
-        this.dept = dept;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 }

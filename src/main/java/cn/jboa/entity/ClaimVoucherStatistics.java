@@ -1,6 +1,6 @@
 package cn.jboa.entity;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
 public class ClaimVoucherStatistics {
@@ -8,8 +8,19 @@ public class ClaimVoucherStatistics {
     private double totalCount;
     private int year;
     private int month;
-    private Timestamp modifyTime;
+    private Date modifyTime;
     private Department department;
+
+    public ClaimVoucherStatistics() {
+    }
+
+    public ClaimVoucherStatistics(double totalCount, int year, int month, Date modifyTime, Department department) {
+        this.totalCount = totalCount;
+        this.year = year;
+        this.month = month;
+        this.modifyTime = modifyTime;
+        this.department = department;
+    }
 
     public int getId() {
         return id;
@@ -43,11 +54,11 @@ public class ClaimVoucherStatistics {
         this.month = month;
     }
 
-    public Timestamp getModifyTime() {
+    public Date getModifyTime() {
         return modifyTime;
     }
 
-    public void setModifyTime(Timestamp modifyTime) {
+    public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
     }
 

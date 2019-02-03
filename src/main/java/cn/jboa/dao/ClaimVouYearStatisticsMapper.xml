@@ -3,6 +3,80 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="cn.jboa.dao.ClaimVouYearStatisticsMapper">
-  
+
+    <resultMap id="statisticsMap" type="ClaimVouYearStatistics">
+      <id property="id" column="s_id"/>
+      <result property="totalCount" column="TOTAL_COUNT"/>
+      <result property="year" column="YEAR"/>
+      <result property="modifyTime" column="MODIFY_TIME"/>
+      <association property="department" javaType="Department">
+        <id property="id" column="d_id"/>
+        <result property="name" column="d_name"/>
+      </association>
+    </resultMap>
+
+    <select id="findDeptYearStatisticsCount" resultType="int">
+      select count(1) from biz_claim_vouyear__statistics s
+      inner join sys_department  d on d.ID=s.DEPARTMENT_ID
+      <where>
+        <if test="startYear!=0">
+          and s.YEAR >= #{startYear}
+        </if>
+        <if test="endYear!=0">
+          and s.YEAR &lt;= #{endYear}
+        </if>
+        <if test="departmentId!=0">
+          and d.ID = #{departmentId}
+        </if>
+      </where>
+    </select>
+
+    <select id="findDeptYearStatistics" resultMap="statisticsMap">
+      select s.*,s.ID s_id,d.ID d_id,d.NAME d_name from biz_claim_vouyear__statistics s
+      inner join sys_department  d on d.ID=s.DEPARTMENT_ID
+      <where>
+        <if test="startYear!=0">
+          and s.YEAR >= #{startYear}
+        </if>
+        <if test="endYear!=0">
+          and s.YEAR &lt;= #{endYear}
+        </if>
+        <if test="departmentId!=0">
+          and s.DEPARTMENT_ID=#{departmentId}
+        </if>
+      </where>
+      limit #{from},#{pageSize}
+    </select>
+
+  <resultMap id="statisticsMapTwo" type="ClaimVoucherStatistics">
+    <id property="id" column="s_id"/>
+    <result property="totalCount" column="totalAccount"/>
+    <result property="year" column="YEAR"/>
+    <result property="modifyTime" column="MODIFY_TIME"/>
+  </resultMap>
+  <select id="findYearStatistics" resultMap="statisticsMapTwo">
+    select s.*,sum(s.TOTAL_COUNT) totalAccount
+    from biz_claim_vouyear__statistics s
+    <where>
+      <if test="startYear!=0">
+        and s.YEAR >= #{startYear}
+      </if>
+      <if test="endYear!=0">
+        and s.YEAR &lt;= #{endYear}
+      </if>
+    </where>
+    group by s.year
+  </select>
+
+  <update id="update" parameterType="ClaimVoucherStatistics">
+    update biz_claim_vouyear__statistics
+    set TOTAL_COUNT=TOTAL_COUNT+#{totalCount},MODIFY_TIME=#{modifyTime}
+    where DEPARTMENT_ID=#{department.id} and year=#{year}
+  </update>
+
+  <insert id="save" parameterType="ClaimVoucherStatistics">
+    INSERT INTO biz_claim_vouyear__statistics (TOTAL_COUNT, YEAR, DEPARTMENT_ID, MODIFY_TIME)
+    VALUES (#{totalCount}, #{year},  #{department.id},#{modifyTime});
+  </insert>
 
   </mapper>

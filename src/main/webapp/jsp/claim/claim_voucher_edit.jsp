@@ -1,12 +1,12 @@
-﻿<%@ page language="java" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ include file="../common/taglib.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>北大青鸟办公自动化管理系统</title>
-		<link href="<%=request.getContextPath() %>/css/style.css" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.0.min.js"></script>
+		<link href="<%=request.getContextPath() %>/statics/css/style.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="${pageContext.request.contextPath}/statics/js/jquery-1.8.0.min.js"></script>
 		<script type="text/javascript">
 			$(function(){				
 			//表单提交校验
@@ -102,21 +102,21 @@
 	<div class="action  divaction">
 		<div class="t">报销单添加</div>
 		<div class="pages">
-			<s:form action="claimVoucher_saveClaimVoucher.action" name="claimForm">
+			<form action="/claimVoucher/saveClaimVoucher" name="claimForm">
 			
-			<input type="hidden" id="rowNumber" name="rowNumber" value="<s:property value="rowNumber"/>"/>
+			<input type="hidden" id="rowNumber" name="rowNumber" value="${rowNumber}"/>
 				<table width="90%" border="0" cellspacing="0" cellpadding="0" class="addform-base">
 					<tr>
 						<td>*填报人：</td>
-						<td><s:property value="#session.employee.name"/></td>
+						<td>${sessionScope.employee.name}"</td>
 						<td>*填报时间：</td>
 						<td>2013-8-17 8：30</td>
 					</tr>
 					<tr>
 						<td>*总金额：￥</td>
-						<td><input type="text" id="totalAccount" name="claimVoucher.totalAccount" value=""/></td>
+						<td><input type="text" id="totalAccount" name="totalAccount" value="" readonly="true"/></td>
 						<td>*状态：</td>
-						<td><input type="text" id="status" name="claimVoucher.status" value="新创建"
+						<td><input type="text" id="status" name="status" value="新创建"
 								readonly="readonly" /></td>
 					</tr>
 					<tr>
@@ -134,7 +134,7 @@
 				<table id="detailTable" width="90%" border="0" cellspacing="0" cellpadding="0" class="addform-base">
 					<tr>
 						<td width="30%">
-							<select name="claimVoucherDetail.item" id="item">
+							<select name="item" id="item">
 								<option value="城际交通费">城际交通费</option>
 								<option value="市内交通费">市内交通费</option>
 								<option value="通讯费">通讯费</option>
@@ -145,16 +145,16 @@
 								<option value="住宿费">住宿费</option>
 							</select>
 						</td>
-						<td width="30%"><input type="text" name="claimVoucherDetail.account" id="account" /><span class=notice>*</span></td>
-						<td width="30%"><input type="text" name="claimVoucherDetail.desc" id="desc" /><span class=notice>*</span></td>
+						<td width="30%"><input type="text" name="account" id="account" /><span class=notice>*</span></td>
+						<td width="30%"><input type="text" name="desc" id="desc" /><span class=notice>*</span></td>
 						<td width="10%"><img src="${images}/add.gif" width="16" height="16" id="AddRow"/></td>
 					</tr>
 				</table>
 				<table>
 					<tr>
 						<td>*事由：</td>
-						<td colspan="3"><textarea rows="5" cols="66" name="claimVoucher.event"
-										id="event"></textarea>
+						<td colspan="3">
+							<textarea rows="5" cols="66" name="event" id="event"></textarea>
 						</td>
 					</tr>
 					<tr align="center" colspan="4">
@@ -168,7 +168,7 @@
 						</td>
 					</tr>
 				</table>
-				</s:form>
+				</form>
 			</div>
 		</div>
 	</body>
