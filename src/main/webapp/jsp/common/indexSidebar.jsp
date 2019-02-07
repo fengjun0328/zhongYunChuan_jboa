@@ -8,12 +8,12 @@
 	           <c:if test='${sessionScope.employee_position=="员工"}'>
 	           <dd><a href="/claimVoucher/toAdd">添加报销单</a></dd>
 	           </c:if>
-	       </dl>
+		</dl>
        <dl>
        		<dt onclick="this.parentNode.className=this.parentNode.className=='open'?'':'open';">请假管理</dt>
-	           <dd><a href="jsp/leave/leave_searchLeave.action">查看请假</a></dd>
+	           <dd><a href="/leave/searchLeave">查看请假</a></dd>
 	           <c:if test='${sessionScope.employee_position=="员工"}'>
-		       <dd><a href="jsp/leave/leave_toEdit.action">申请请假</a></dd>
+		       <dd><a href="/leave/toEdit">申请请假</a></dd>
 		       </c:if>
        </dl>
        <c:if test='${sessionScope.employee_position=="部门经理"}'>

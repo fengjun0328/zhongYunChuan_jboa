@@ -3,6 +3,71 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="cn.jboa.dao.LeaveMapper">
-  
+
+    <resultMap id="leaveMap" type="Leave">
+      <id property="id" column="ID"/>
+      <result property="startTime" column="STARTTIME"/>
+      <result property="endTime" column="ENDTIME"/>
+      <result property="leaveDay" column="LEAVEDAY"/>
+      <result property="reason" column="REASON"/>
+      <result property="status" column="STATUS"/>
+      <result property="leaveType" column="LEAVETYPE"/>
+      <result property="approveOpinion" column="APPROVE_OPINION"/>
+      <result property="createTime" column="CREATETIME"/>
+      <result property="modifyTime" column="MODIFYTIME"/>
+      <association property="creator" column="EMPLOYEE_SN" select="cn.jboa.dao.EmployeeMapper.findEmployeeBySn"/>
+      <association property="nextDeal" column="NEXT_DEAL_SN" select="cn.jboa.dao.EmployeeMapper.findEmployeeBySn"/>
+    </resultMap>
+
+    <select id="getLeaveCount" resultType="int">
+        select count(1) from biz_leave `leave`
+        <where>
+          <if test="createSn!=null and createSn!=''">
+            and leave.EMPLOYEE_SN=#{createSn}
+          </if>
+          <if test="dealSn!=null and dealSn!=''">
+            and leave.NEXT_DEAL_SN=#{dealSn}
+          </if>
+          <if test="startDate!=null and startDate!=''">
+            and leave.CREATETIME>#{startDate}
+          </if>
+          <if test="endDate!=null and endDate!=''">
+            and leave.CREATETIME&lt;#{endDate};
+          </if>
+        </where>
+    </select>
+
+    <select id="getLeavePage" resultMap="leaveMap">
+      select * from biz_leave `leave`
+      <where>
+        <if test="createSn!=null and createSn!=''">
+          and leave.EMPLOYEE_SN=#{createSn}
+        </if>
+        <if test="dealSn!=null and dealSn!=''">
+          and leave.NEXT_DEAL_SN=#{dealSn}
+        </if>
+        <if test="startDate!=null and startDate!=''">
+          and leave.CREATETIME>#{startDate}
+        </if>
+        <if test="endDate!=null and endDate!=''">
+          and leave.CREATETIME&lt;#{endDate}
+        </if>
+      </where>
+      limit #{from},#{pageSize}
+    </select>
+
+    <select id="findLeaveById" resultMap="leaveMap" parameterType="int">
+      select * from biz_leave where ID=#{id};
+    </select>
+
+    <update id="checkLeave" parameterType="Leave">
+      update biz_leave set STATUS=#{status},MODIFYTIME=#{modifyTime}, NEXT_DEAL_SN=null where ID=#{id};
+    </update>
+
+
+    <insert id="saveLeave" parameterType="Leave">
+      INSERT INTO BIZ_LEAVE (EMPLOYEE_SN, STARTTIME, ENDTIME, LEAVEDAY, REASON, STATUS, LEAVETYPE, NEXT_DEAL_SN, APPROVE_OPINION, CREATETIME, MODIFYTIME)
+      VALUES (#{creator.sn}, #{startTime}, #{endTime}, #{leaveDay}, #{reason}, #{status}, #{leaveType},#{nextDeal.sn}, NULL, #{createTime}, NULL);
+    </insert>
 
   </mapper>

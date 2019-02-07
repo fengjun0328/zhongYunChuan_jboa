@@ -73,14 +73,18 @@
 	</bean>
 	
 	<!-- 拦截器 -->
-	<!--<mvc:interceptors>
+	<mvc:interceptors>
 		<mvc:interceptor>
-			<mvc:mapping path="/user/**"/>
-			<mvc:mapping path="/bill/**"/>
-			<mvc:mapping path="/provider/**"/>
-			<mvc:mapping path="/bill/**"/>
-			<bean class="cn.smbms.filter.MyInterceptor" />
+			<mvc:mapping path="/checkResult/**"/>
+			<mvc:mapping path="/claimVoucher/**"/>
+			<mvc:mapping path="/claimVoucherDetail/**"/>
+			<mvc:mapping path="/compMonthStatistics/**"/>
+			<mvc:mapping path="/compYearStatistics/**"/>
+			<mvc:mapping path="/deptMonthStatistics/**"/>
+			<mvc:mapping path="/deptYearStatistics/**"/>
+			<mvc:mapping path="/leave/**"/>
+			<bean class="cn.jboa.filter.MyInterceptor" />
 		</mvc:interceptor> 
-	</mvc:interceptors>-->
+	</mvc:interceptors>
 	
 </beans>

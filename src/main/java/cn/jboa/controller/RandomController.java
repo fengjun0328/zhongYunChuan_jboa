@@ -32,8 +32,9 @@ public class RandomController {
         response.setContentType("image/png");
         OutputStream os = response.getOutputStream();
         BufferedImage image = ImageIO.read(rdnu.getImage());
-        ImageIO.write(image, "png", os);
         session.setAttribute("msg",rdnu.getString());
+        ImageIO.write(image, "png", os);
+
     }
 
 }

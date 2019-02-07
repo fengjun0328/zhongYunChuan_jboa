@@ -1,12 +1,13 @@
-<%@ page language="java" pageEncoding="UTF-8"%>
-<%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ page language="java" pageEncoding="UTF-8" isELIgnored="false" %>
+<%--<%@ taglib prefix="s" uri="/struts-tags"%>--%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>北大青鸟办公自动化管理系统</title>
-		<link href="<%=request.getContextPath() %>/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="<%=request.getContextPath() %>/statics/css/style.css" rel="stylesheet" type="text/css" />
 	</head>
 <body>
 <div class="action  divaction">
@@ -22,34 +23,34 @@
 					</caption>
 					<tr>
 						<td width="36%">
-							姓名：<s:property value="leave.creator.name"/>
+							姓名：${leave.creator.name}
 						</td>
 						<td width="64%">
-							部门：<s:property value="leave.creator.sysDepartment.name"/>
+							部门：${leave.creator.department.name}
 						</td>
 					</tr>
 					<tr>
 						<td>
-							开始时间：<s:date name="leave.startTime" format="yyyy-MM-dd hh:mm"/>
+							开始时间：<fmt:formatDate value="${leave.startTime}" pattern="yyyy-MM-dd hh:mm"/>
 						</td>
 						<td>
-							结束时间：<s:date name="leave.endTime" format="yyyy-MM-dd hh:mm"/>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							请假天数：<s:property value="leave.leaveDay"/>
-						</td>
-						<td>
-							休假类型：<s:property value="leave.leaveType"/>
+							结束时间：<fmt:formatDate value="${leave.endTime}" pattern="yyyy-MM-dd hh:mm"/>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							请假事由：<s:property value="leave.reason"/>
+							请假天数：${leave.leaveDay}
 						</td>
 						<td>
-							审批状态：<s:property value="leave.status"/>
+							休假类型：${leave.leaveType}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							请假事由：${leave.reason}
+						</td>
+						<td>
+							审批状态：${leave.status}
 						</td>
 					</tr>
 				</table>
@@ -65,7 +66,7 @@
 					</tr>
 					<tr>
 						<td>
-						<s:textarea name="leave.approveOpinion" id="textarea" cols="45" rows="5"/>
+							<textarea name="approveOpinion" id="textarea" cols="45" rows="5">${leave.approveOpinion}</textarea>
 						</td>
 					</tr>
 					<!--表单提交行-->

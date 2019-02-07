@@ -7,6 +7,7 @@ import cn.jboa.service.EmployeeService;
 import cn.jboa.util.MD5;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
@@ -22,7 +23,12 @@ public class EmployeeController  {
     private EmployeeService employeeService; //员工业务类
 
     @RequestMapping(value = "/login")
-    public String login(Employee employee, HttpSession session){
+    public String login( HttpSession session, Model model,Employee employee,String random){
+        String sRandom= (String) session.getAttribute("msg");
+        if (!sRandom.equals(random)){
+            model.addAttribute("loginInfo","验证码不正确");
+            return "login";
+        }
         try {
             employee.setPassword(MD5.MD5Encode(employee.getPassword())); //MD5摘要格式密码
             employee = employeeService.login(employee); //查询员工
@@ -30,10 +36,11 @@ public class EmployeeController  {
             session.setAttribute(Constants.AUTH_EMPLOYEE,employee);
             session.setAttribute(Constants.AUTH_EMPLOYEE_MANAGER,manager);
             session.setAttribute(Constants.EMPLOYEE_POSITION,employee.getPosition().getNameCn());
+            return "index";
         }catch (JboaException ex){
             ex.printStackTrace();
+            model.addAttribute("loginInfo","工号或密码错误");
             return "login";
         }
-        return "index";
     }
 }

@@ -78,8 +78,7 @@
 </style>
 <script type="text/javascript">
 	function changeValidateCode(obj) {
-	    alert("刷新验证码");
-		//获取当前的时间作为参数，无具体意义 
+		//获取当前的时间作为参数，无具体意义
 		var timenow = new Date().getTime();
 		//每次请求需要一个不同的参数，否则可能会返回同样的验证码
 		//这和浏览器的缓存机制有关系，也可以把页面设置为不缓存，这样就不用这个参数了。 
@@ -114,7 +113,6 @@
 			<input type="image" src="/random.do"
 				onclick="changeValidateCode(this)" title="点击图片刷新验证码" />
 			<input type="submit" class="login-sub" value="" />
-			<s:actionerror cssStyle="margin-top: 10px;"/>
 			<input type="hidden" id="msg" value="${sessionScope.msg }" />
 		</form>
 	</div>

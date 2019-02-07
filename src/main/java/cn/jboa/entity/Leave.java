@@ -1,19 +1,22 @@
 package cn.jboa.entity;
 
-import java.sql.Timestamp;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 import java.util.Objects;
 
 public class Leave {
     private int id;
-    private Timestamp startTime;
-    private Timestamp endtime;
+    private Date startTime;
+    private Date endTime;
     private double leaveDay;
     private String reason;
     private String status;
     private String leaveType;
     private String approveOpinion;
-    private Timestamp createTime;
-    private Timestamp modifyTime;
+    private Date createTime;
+    private Date modifyTime;
     private Employee creator;
     private Employee nextDeal;
 
@@ -25,20 +28,24 @@ public class Leave {
         this.id = id;
     }
 
-    public Timestamp getStartTime() {
+//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndtime() {
-        return endtime;
+//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setEndtime(Timestamp endtime) {
-        this.endtime = endtime;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public double getLeaveDay() {
@@ -81,19 +88,19 @@ public class Leave {
         this.approveOpinion = approveOpinion;
     }
 
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public Timestamp getModifyTime() {
+    public Date getModifyTime() {
         return modifyTime;
     }
 
-    public void setModifyTime(Timestamp modifyTime) {
+    public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
     }
 
@@ -105,7 +112,7 @@ public class Leave {
         return id == leave.id &&
                 Double.compare(leave.leaveDay, leaveDay) == 0 &&
                 Objects.equals(startTime, leave.startTime) &&
-                Objects.equals(endtime, leave.endtime) &&
+                Objects.equals(endTime, leave.endTime) &&
                 Objects.equals(reason, leave.reason) &&
                 Objects.equals(status, leave.status) &&
                 Objects.equals(leaveType, leave.leaveType) &&
@@ -116,7 +123,7 @@ public class Leave {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, startTime, endtime, leaveDay, reason, status, leaveType, approveOpinion, createTime, modifyTime);
+        return Objects.hash(id, startTime, endTime, leaveDay, reason, status, leaveType, approveOpinion, createTime, modifyTime);
     }
 
     public Employee getCreator() {

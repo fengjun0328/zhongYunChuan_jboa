@@ -7,6 +7,7 @@ import cn.jboa.entity.Employee;
 import cn.jboa.exception.JboaException;
 import cn.jboa.service.ClaimVoucherService;
 import cn.jboa.util.PaginationSupport;
+import cn.jboa.util.RedisCacheStorage;
 import com.auth0.jwt.interfaces.Claim;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,11 @@ public class ClaimVoucherController {
     @Autowired
     private ClaimVoucherService claimVoucherService; //报销单业务类
 
+    @Autowired
+    private RedisCacheStorage redisCacheStorage;
+
     private Map statusMap;
+
 
     /**
      * 查询当前员工所有报销单
@@ -167,17 +172,12 @@ public class ClaimVoucherController {
         return "jsp/claim/claim_voucher_check";
     }
 
-    @RequestMapping(value = "/checkClaimVoucher")
-    public String checkClaimVoucher(CheckResult checkResult){
-
-        return "";
-    }
-
     public Map getStatusMap() {
-        return claimVoucherService.getAllStatusMap();
-    }
-
-    public void setStatusMap(Map statusMap) {
-        this.statusMap = statusMap;
+        statusMap=redisCacheStorage.queryHashMapByKey("statusMap");
+        if (statusMap==null){
+            statusMap=claimVoucherService.getAllStatusMap();
+            redisCacheStorage.addHashMap("statusMap",statusMap);
+        }
+        return statusMap;
     }
 }

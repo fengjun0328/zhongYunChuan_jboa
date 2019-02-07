@@ -1,9 +1,9 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ include file="../common/taglib.jsp"%>
-<link href="<%=request.getContextPath() %>/css/style.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/common.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.0.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/My97DatePicker/WdatePicker.js"></script>
+<link href="<%=request.getContextPath() %>/statics/css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="${pageContext.request.contextPath}/statics/js/common.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/statics/js/jquery-1.8.0.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/statics/js/My97DatePicker/WdatePicker.js"></script>
 <script>
 	$(function(){
 			 //日期选择控件
@@ -19,15 +19,15 @@
 	<div class="t">请假列表</div>
 	<div class="pages">
 		<div class="forms">
-		<s:form action="leave_searchLeave.action" name="queryForm">
+		<form action="/leave/searchLeave" name="queryForm">
 	       <label for="time">开始时间</label>
-	       <s:textfield name="startDate" id="startDate" cssClass="nwinput"></s:textfield>
+	       <textarea name="startDate" id="startDate" class="nwinput">${startDate}</textarea>
 	       <label for="end-time">结束时间</label>
-	       <s:textfield name="endDate" id="endDate" cssClass="nwinput"></s:textfield>
+	       <textarea name="endDate" id="endDate" class="nwinput">${endDate}</textarea>
 	       <input type="hidden" name="pageNo" value="1"/>
 		   <input type="hidden" name="pageSize" value="5"/>
-		   <s:submit cssClass="submit_01" value="查询"/>
-	     </s:form>
+		   <input type="submit" class="submit_01" value="查询"/>
+	     </form>
 	     </div>
 	<!--增加报销单 区域 开始-->
 		<table width="90%" border="0" cellspacing="0" cellpadding="0" class="list items">
@@ -40,25 +40,25 @@
 	        <td>审批状态</td>
 	        <td>操作</td>
 	      </tr>
-	      <s:iterator value="pageSupport.items" id="leave" begin="0" status="s">
+	      <c:forEach items="${pageSupport.items}" var="leave" begin="0" varStatus="s">
 	      <tr>
-	        <td><a href="leave_getLeaveById.action?leave.id=<s:property value="#leave.id"/>"><s:property value="#leave.id"/></a></td>
-	        <td><s:property value="#leave.creator.name"/>请假<s:property value="#leave.leaveDay"/>天</td>
-	        <td><s:date name="#leave.createTime" format="yyyy-MM-dd HH:mm"/></td>
-	        <td><s:date name="#leave.ModifyTime" format="yyyy-MM-dd HH:mm"/></td>
-	        <td><s:property value="#leave.approveOpinion"/></td>
-	        <td><s:property value="#leave.status"/></td>
+	        <td><a href="/leave/getLeaveById/${leave.id}">${leave.id}</a></td>
+	        <td>${leave.creator.name}请假${leave.leaveDay}天</td>
+	        <td><fmt:formatDate value="${leave.createTime}" pattern="yyyy-MM-dd HH:mm"/></td>
+	        <td><fmt:formatDate value="${leave.modifyTime}" pattern="yyyy-MM-dd HH:mm"/></td>
+	        <td>${leave.approveOpinion}</td>
+	        <td>${leave.status}</td>
 	        <td>
-	       	 <a href="leave_getLeaveById.action?leave.id=<s:property value="#leave.id"/>"><img src="${images}/search.gif" width="16" height="15" /></a>
-	       	  <s:if test="#leave.nextDeal.name == #session.employee.name">
-		        <s:if test="#leave.status == '待审批'">
-	       	 		<a href="leave_toCheck.action?leave.id=<s:property value="#leave.id"/>">
+	       	 <a href="/leave/getLeaveById/${leave.id}"><img src="${images}/search.gif" width="16" height="15" /></a>
+	       	  <c:if test="${leave.nextDeal.name == sessionScope.employee.name}">
+		        <c:if test="${leave.status == '待审批'}">
+	       	 		<a href="/leave/toCheck/${leave.id}">
 	       	 		<img src="${images}/sub.gif" width="16" height="16" /></a> 
-	       	 	</s:if>
-	       	 </s:if>
+	       	 	</c:if>
+	       	 </c:if>
 	        </td>
 	      </tr>
-	      </s:iterator>
+	      </c:forEach>
 	      <tr>
 	        <td colspan="7" align="center">
 		      	<c:import url="../common/rollPage.jsp" charEncoding="UTF-8">

@@ -28,12 +28,33 @@
 		<property name="validationQuery" value="select 1"/>
 	</bean>
 
+	<!-- jedis 连接池配置参数：-->
+	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxTotal" value="100"></property>
+		<property name="maxIdle" value="25"></property>
+		<property name="maxWaitMillis" value="15000"></property>
+		<property name="testOnBorrow" value="false"></property>
+		<property name="testOnReturn" value="false"></property>
+	</bean>
+	<!-- jedis 连接池  连接本地redis服务 构造器注入-->
+	<bean id="pool" class="redis.clients.jedis.JedisPool">
+		<constructor-arg index="0"  ref="poolConfig"/>
+		<constructor-arg index="1" value="192.168.43.222"/>
+		<constructor-arg index="2" value="6379"/>
+		<constructor-arg index="3" value="2000"/>
+	</bean>
+	<!-- cleint-->
+	<bean id="redisClient" class="cn.jboa.util.RedisClient">
+		<property name="pool" ref="pool"/>
+	</bean>
 	<!--配置sessionFactory-->
 	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"/>
 		<property name="typeAliasesPackage" value="cn.jboa.entity"/>
 	</bean>
-
+	<bean id="storageCache" class="cn.jboa.util.RedisCacheStorageImpl">
+		<property name="redisClient" ref="redisClient" />
+	</bean>
 	<!--生成Dao实现类-->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="cn.jboa.dao"/>

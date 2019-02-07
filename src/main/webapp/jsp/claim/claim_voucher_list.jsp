@@ -29,7 +29,7 @@
 		<div class="forms">
 			 <form action="/claimVoucher/searchClaimVoucher" name="queryForm">
 	       		<label>报销单状态</label>
-                 <select name="status">
+                 <select name="status" class="nwselect">
                      <option value="">全部</option>
                      <c:forEach items="${statusMap}" var="item">
                          <option value="${item.key}"  <c:if test="${status == item.key}">selected="selected"</c:if> >${item.value}</option>
